@@ -10,6 +10,7 @@ for root, dirs, files in os.walk(path):
       bpy.ops.object.select_all(action='SELECT')
       bpy.ops.object.delete()
       try:
+        print("Converting {}...".format(mesh_file))
         bpy.ops.import_scene.nif(filepath=mesh_file)
         bpy.ops.object.select_all(action='SELECT')
         bpy.ops.export_scene.obj(filepath=obj_file)
