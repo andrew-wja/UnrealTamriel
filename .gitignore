@@ -1,1 +1,8 @@
 *.pyc
+Data/**/*.dds
+Data/**/*.nif
+Data/**/*.mtl
+Data/**/*.obj
+Data/**/*.pso
+Data/**/*.kf
+Data/**/*.vso
