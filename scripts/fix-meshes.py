@@ -7,8 +7,9 @@ for root, dirs, files in os.walk(path):
   for f in files:
     if f.endswith('hlaalu_b_17.nif'):
       mesh_file = os.path.join(root, f)
-      out_file = os.path.join("D:\\UnrealTamriel\\Data\\meshes\\x\\output", f)
-      fbx_out = os.path.join("D:\\UnrealTamriel\\Data\\meshes\\x\\output", os.path.splitext(f)[0]) + '.fbx'
+      out_file = os.path.join("D:\\UnrealTamriel\\Data\\output\\meshes\\x", f)
+      fbx_out = os.path.join("D:\\UnrealTamriel\\Data\\output\\meshes\\x", os.path.splitext(f)[0]) + '.fbx'
+      fbx_out = os.path.join("D:\\UnrealTamriel\\Data\\output\\meshes\\x", os.path.splitext(f)[0]) + '.obj'
       
       export_nif = True
       export_fbx = True
@@ -92,7 +93,6 @@ for root, dirs, files in os.walk(path):
                     image_name = obj.name + '_BakedTexture'
                     img = bpy.data.images.new(image_name,1024,1024)
                     
-                    uv = bpy.data
                     
                     #Due to the presence of any multiple materials, it seems necessary to iterate on all the materials, and assign them a node + the image to bake.
                     for mat in obj.data.materials:
@@ -108,8 +108,8 @@ for root, dirs, files in os.walk(path):
                     bpy.context.view_layer.objects.active = obj
                     bpy.ops.object.bake(type='DIFFUSE', pass_filter={'COLOR'}, save_mode='EXTERNAL')
 
-                    img.save_render(filepath="D:\\UnrealTamriel\\Data\\textures\\output\\" + os.path.splitext(f)[0] + ".dds")
-                    img.save_render(filepath="D:\\UnrealTamriel\\Data\\textures\\output\\" + os.path.splitext(f)[0] + ".bmp")
+                    img.save_render(filepath="D:\\UnrealTamriel\\Data\\output\\textures\\" + os.path.splitext(f)[0] + ".dds")
+                    img.save_render(filepath="D:\\UnrealTamriel\\Data\\output\\textures\\" + os.path.splitext(f)[0] + ".bmp")
                     
                     
                     bpy.ops.object.mode_set(mode='OBJECT')
@@ -119,11 +119,12 @@ for root, dirs, files in os.walk(path):
                             if True and n.name == 'Bake_node':
                                 mat.node_tree.nodes.remove(n)
                         bpy.ops.object.select_all(action='DESELECT')
-                        obj.data.materials.remove(mat)
+                        #obj.data.materials.remove(mat)
                         bpy.data.materials.remove(mat)
                         
-                    #newMat = obj.data.materials.new()
-                    #newMat.
+                    newMat = bpy.data.materials.new(os.path.splitext(f)[0])
+                    bpy.ops.material.mw_create_shader()
+                    print(dir(newMat))
                 
                 if export_nif:
                     bpy.ops.export_scene.mw(filepath=out_file)
