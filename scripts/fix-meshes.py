@@ -7,11 +7,11 @@ for root, dirs, files in os.walk(path):
   for f in files:
     if f.endswith('hlaalu_b_17.nif'):
       mesh_file = os.path.join(root, f)
-      out_file = os.path.join("D:\\UnrealTamriel\\Data\\meshes\\x\\output",f)
-      fbx_out = out_file + '.fbx'
+      out_file = os.path.join("D:\\UnrealTamriel\\Data\\meshes\\x\\output", f)
+      fbx_out = os.path.join("D:\\UnrealTamriel\\Data\\meshes\\x\\output", os.path.splitext(f)[0]) + '.fbx'
       
-      export_nif = False
-      export_fbx = False
+      export_nif = True
+      export_fbx = True
       
       if bpy.context.object:
           bpy.ops.object.mode_set(mode='OBJECT')
@@ -72,9 +72,14 @@ for root, dirs, files in os.walk(path):
                     bpy.context.scene.render.engine = 'CYCLES'
                     
                     rootTri = next((obj for obj in bpy.data.objects if obj.name.startswith('Tri Ex')), None)
-                    rootTri.children[0].select_set(True)
-                    rootTri.children[0].data.uv_layers.new(name='new')
-                    rootTri.children[0].data.uv_layers['new'].active = True
+                    print('rootTri: {}', rootTri)
+                    print('rootTri Type: {}', rootTri.type)
+                    
+                    if (rootTri.type != 'MESH'):
+                        rootTri = rootTri.children[0]
+                    rootTri.select_set(True)
+                    rootTri.data.uv_layers.new(name='new')
+                    rootTri.data.uv_layers['new'].active = True
                     
                     bpy.ops.object.mode_set(mode='EDIT')
                     bpy.ops.uv.unwrap()
@@ -101,9 +106,10 @@ for root, dirs, files in os.walk(path):
                         texture_node.image = img #Assign the image to the node
                         
                     bpy.context.view_layer.objects.active = obj
-                    bpy.ops.object.bake(type='COMBINED', save_mode='EXTERNAL')
+                    bpy.ops.object.bake(type='DIFFUSE', pass_filter={'COLOR'}, save_mode='EXTERNAL')
 
-                    img.save_render(filepath="D:\\UnrealTamriel\\Data\\textures\\output" + f + ".dds")
+                    img.save_render(filepath="D:\\UnrealTamriel\\Data\\textures\\output\\" + os.path.splitext(f)[0] + ".dds")
+                    img.save_render(filepath="D:\\UnrealTamriel\\Data\\textures\\output\\" + os.path.splitext(f)[0] + ".bmp")
                     
                     
                     bpy.ops.object.mode_set(mode='OBJECT')
