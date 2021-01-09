@@ -14,12 +14,12 @@ def main():
       for f in files:
         if f.endswith('.dds'):
           dds_file = os.path.join(root, f)
-          tga_file = os.path.splitext(dds_file)[0] + ".tga"
+          bmp_file = os.path.splitext(dds_file)[0] + ".bmp"
           try:
             print("Converting {}...".format(dds_file))
             with image.Image(filename=dds_file) as img:
               img.compression = "no"
-              img.save(filename=tga_file)
+              img.save(filename=bmp_file)
               os.remove(dds_file)
           except Exception as e:
             print("Corrupted DDS file: {}".format(dds_file))
