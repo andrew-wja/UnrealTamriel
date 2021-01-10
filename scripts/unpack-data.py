@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import argparse
 import subprocess
@@ -17,7 +19,7 @@ def main():
       for f in files:
         if f.endswith('.bsa'):
           bsa_file = os.path.join(root, f)
-          bsa_dir = os.path.join(args.output_path, os.path.splitext(f)[0] + "_bsa")
+          bsa_dir = args.output_path
 
           print("Extracting {} to {}".format(os.path.abspath(bsa_file), os.path.abspath(bsa_dir)))
 

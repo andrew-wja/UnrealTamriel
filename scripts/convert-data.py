@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import argparse
 import subprocess
@@ -13,23 +15,23 @@ def main():
     for root, dirs, files in os.walk(args.asset_path):
       for f in files:
         if f.endswith('.dds'):
-          dds_file = os.path.join(root, f)
-          bmp_file = os.path.splitext(dds_file)[0] + ".bmp"
+          in_file = os.path.join(root, f)
+          out_file = os.path.splitext(in_file)[0] + ".bmp"
           try:
-            print("Converting {}...".format(dds_file))
-            with image.Image(filename=dds_file) as img:
+            print("Converting {}...".format(in_file))
+            with image.Image(filename=in_file) as img:
               img.compression = "no"
-              img.save(filename=bmp_file)
-              os.remove(dds_file)
+              img.save(filename=out_file)
+              os.remove(in_file)
           except Exception as e:
-            print("Corrupted DDS file: {}".format(dds_file))
+            print("Corrupted DDS file: {}".format(in_file))
 
         elif f.endswith('.mp3'):
-          mp3_file = os.path.join(root, f)
-          wav_file = os.path.join(root, os.path.splitext(f)[0] + ".wav")
-          print("Converting {}...".format(mp3_file))
-          subprocess.run(["ffmpeg", "-v", "quiet", "-i", mp3_file, wav_file])
-          os.remove(mp3_file)
+          in_file = os.path.join(root, f)
+          out_file = os.path.join(root, os.path.splitext(f)[0] + ".wav")
+          print("Converting {}...".format(in_file))
+          subprocess.run(["ffmpeg", "-v", "quiet", "-i", in_file, out_file])
+          os.remove(in_file)
 
         else:
           print("Not converting {}".format(os.path.join(root, f)))
