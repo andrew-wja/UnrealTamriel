@@ -131,16 +131,19 @@ def main():
                 texture_node.image = img #Assign the image to the node
 
             bpy.context.view_layer.objects.active = obj
-            bpy.ops.object.bake(type='DIFFUSE', pass_filter={'COLOR'}, save_mode='EXTERNAL', use_selected_to_active=True)
+            # ~ bpy.ops.object.select_all(action='DESELECT')
+            # ~ bpy.ops.object.select_pattern(pattern=str(rootTri))
+            # ~ bpy.context.scene.objects.active = bpy.context.selected_objects[0]
 
-            if args.texture_format == TextureFormat.bmp:
-                img.save_render(filepath=os.path.join(root, os.path.splitext(f)[0] + ".bmp"))
-            elif args.texture_format == TextureFormat.dds:
-                img.save_render(filepath=os.path.join(root, os.path.splitext(f)[0] + ".dds"))
-            elif args.texture_format == TextureFormat.tga:
-                img.save_render(filepath=os.path.join(root, os.path.splitext(f)[0] + ".tga"))
-            else:
-                print("Unrecognized texture format requested: " + str(args.texture_format))
+            bpy.ops.object.bake(type='DIFFUSE', pass_filter={'COLOR'}, save_mode='EXTERNAL',
+                                use_selected_to_active=False,
+                                filepath=os.path.join(root, os.path.splitext(f)[0] + '.' + str(args.texture_format)))
+
+            # FIXME
+            # With use_selected_to_active=False, (the default) we get a warning:
+            # Info: Baking map saved to internal image, save it externally or pack it
+            # Setting selected_to_active=True is supposed to fix this. However, that
+            # gives us another error: no valid selected object!
 
             bpy.ops.object.mode_set(mode='OBJECT')
             #In the last step, we are going to delete the nodes we created earlier
@@ -153,11 +156,6 @@ def main():
 
             newMat = bpy.data.materials.new(os.path.splitext(f)[0])
             bpy.ops.material.mw_create_shader()
-            print(dir(newMat))
-
-            # We need to re-wrap the UVs so we can export the whole shebang
-            bpy.ops.object.mode_set(mode='EDIT')
-            bpy.ops.uv.wrap()
 
             if args.mesh_format == MeshFormat.nif:
                 bpy.ops.export_scene.mw(filepath=out_file)
