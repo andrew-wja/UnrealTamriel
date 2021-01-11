@@ -153,7 +153,7 @@ def main():
                 # gives us another error: no valid selected object!
 
                 # Manually save the baked texture
-                img.save_render(filepath=os.path.join(root, os.path.splitext(f)[0] + '.png'))
+                img.save_render(filepath=os.path.join(root, os.path.splitext(f)[0] + '.' + str(args.texture_format)))
 
                 # FIXME
                 # We also need to manually save the combined UV and normal maps as well...
