@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
+
 import os
 import bpy
-import enum
+from enum import Enum
 import argparse
 
 class MeshFormat(Enum):
@@ -26,6 +28,9 @@ parser.add_argument('--mesh-format', type=MeshFormat, choices=list(MeshFormat),
                     required=True, help='Format to use for processed meshes')
 parser.add_argument('--texture-format', type=TextureFormat, choices=list(TextureFormat),
                     required=True, help='Format to use for processed textures')
+# Awful hack for Blender python CLI argument passing
+parser.add_argument('--python', type=str, required=False,
+                    help='Blender CLI fix')
 
 def main():
     args = parser.parse_args()
