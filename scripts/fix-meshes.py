@@ -145,6 +145,12 @@ def main():
             # Setting selected_to_active=True is supposed to fix this. However, that
             # gives us another error: no valid selected object!
 
+            # Manually save the baked texture
+            img.save_render(filepath=os.path.join(root, os.path.splitext(f)[0] + '.' + str(args.texture_format)))
+
+            # FIXME
+            # We also need to manually save the combined UV and normal maps as well...
+
             bpy.ops.object.mode_set(mode='OBJECT')
             #In the last step, we are going to delete the nodes we created earlier
             for mat in obj.data.materials:
