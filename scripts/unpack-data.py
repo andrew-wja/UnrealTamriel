@@ -19,7 +19,7 @@ def main():
       for f in files:
         if f.endswith('.bsa'):
           bsa_file = os.path.join(root, f)
-          bsa_dir = args.output_path
+          bsa_dir = os.path.join(args.output_path, f)
 
           print("Extracting {} to {}".format(os.path.abspath(bsa_file), os.path.abspath(bsa_dir)))
 
@@ -28,7 +28,7 @@ def main():
 
         if f.endswith('.esm'):
           esm_file = os.path.join(root, f)
-          esm_dump_path = os.path.join(args.output_path, os.path.splitext(f)[0] + "_esm")
+          esm_dump_path = os.path.join(args.output_path, f)
           esm_dump = open(esm_dump_path, "w")
 
           print("Extracting {} to {}".format(os.path.abspath(esm_file), os.path.abspath(esm_dump_path)))
